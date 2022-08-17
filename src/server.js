@@ -1,21 +1,25 @@
 // @ts-check
 
-"use strict";
+// "use strict";
 /* ============================================
 Imports
 ============================================*/
 const express = require("express");
 const Container = require("./utils/container");
+const { Router } = express;
+
+
+
 
 /* ============================================
 Server setup
 ============================================*/
+
 const app = express();
 const PORT = 8080;
-const { Router } = express;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/dist"));
+// app.use("/public", express.static(__dirname + "/dist"));
 const server = app.listen(PORT, () => {
     console.log(`Server is listening at port ${PORT}`);
 });
@@ -26,7 +30,7 @@ const PERMSSION_ERROR_MSG = "You don't have permission to perform this action";
 
 
 /* ============================================
-Carts
+Carts Endpoint
 ============================================*/
 const routerCarts = Router();
 const carts = new Container("./carts.json");
@@ -127,7 +131,7 @@ routerCarts.delete("/:id/products/:idProd", (req,res) => {
 })
 
 /* ============================================
-Products
+Products endpoint
 ============================================*/
 const routerProducts = Router();
 const products = new Container("./products.json");
@@ -213,4 +217,24 @@ routerProducts.delete("/:id", (req,res) => {
         res.json({error: PERMSSION_ERROR_MSG})
     }
 
+})
+
+
+
+/* ============================================
+EJS setup
+============================================*/
+app.set("view engine", "ejs");
+app.set("views", "./views");
+
+const routerFrontEnd = Router();
+app.use("/", routerFrontEnd);
+
+
+routerFrontEnd.get("/", (req,res) => {
+    // res.render("pages/index", {
+    //     title: "Homepage",
+    //     message: "This is a message"
+    // })
+    res.send("hola")
 })
