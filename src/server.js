@@ -19,7 +19,8 @@ const app = express();
 const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use("/public", express.static(__dirname + "/dist"));
+
+
 const server = app.listen(PORT, () => {
     console.log(`Server is listening at port ${PORT}`);
 });
@@ -225,16 +226,30 @@ routerProducts.delete("/:id", (req,res) => {
 EJS setup
 ============================================*/
 app.set("view engine", "ejs");
-app.set("views", "./views");
+app.set("views", "./src/views");
 
 const routerFrontEnd = Router();
 app.use("/", routerFrontEnd);
 
+let myArray = __dirname.split("/")
+let dir = "";
+for (let i = 1; i < myArray.length - 1; i++){
+    dir = dir + "/" + myArray[i];
+}
 
-routerFrontEnd.get("/", (req,res) => {
-    // res.render("pages/index", {
-    //     title: "Homepage",
-    //     message: "This is a message"
-    // })
-    res.send("hola")
+app.use(express.static(dir + "/dist"));
+
+
+// routerFrontEnd.get("/", (req,res) => {
+//     res.render("pages/index", {
+//         title: "Homepage",
+//         message: "This is a message"
+//     })
+// })
+
+routerFrontEnd.get("/product/:id", (req, res) => {
+    res.render("pages/product", {
+        id: req.params.id,
+        title: `Product ID: ${req.params.id}`
+    })
 })
