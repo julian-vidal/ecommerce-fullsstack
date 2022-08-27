@@ -68,13 +68,14 @@ routerCarts.get("/:id/products", (req, res) => {
 });
 
 
-routerCarts.post("/:id/products", (req,res) => {
+routerCarts.post("/:id/products/:idProd", (req,res) => {
     try {
         (async () => {
             const id = parseInt(req.params.id);
-            const product = req.body;
+            const productId = parseInt(req.params.idProd);
+            // const product = req.body;
             let cart = await carts.getById(id, "cart")
-            const response = await carts.addProductToCart(product, id, cart)
+            const response = await carts.addProductToCart(productId, id, cart)
             res.json({response});
         })()
     } catch(error) {
@@ -89,7 +90,7 @@ routerCarts.delete("/:id/products/:idProd", (req,res) => {
             const idProd = parseInt(req.params.idProd);
             const cart = await carts.getById(idCart, "cart");
 
-            const response = await carts.deleteProductFromCart(idCart, idProd, cart);
+            const response = await carts.deleteProductFromCart(idProd, idCart, cart);
             res.json({response})
         })()
     } catch (error) {

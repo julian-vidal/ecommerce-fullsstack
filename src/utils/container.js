@@ -131,30 +131,65 @@ class Container {
 
     // Exclusive for the cart endpoint
 
-    async addProductToCart(newProduct, cartId, cart) {
+    async addProductToCart(productId, cartId, cart) {
         try {
             let data = await this.readFile();
-            let positionId = await  this.checkIfIdExists(data,cartId);
+            data.map(obj => console.log(`data.obj.products = ${ Object.keys(obj)}`))
+            // console.log(`data = ${Object.keys(data) }`)
+            let cartPositionId = await  this.checkIfIdExists(data,cartId);
             let response;
             
-            if (positionId == -1) {
+            if (cartPositionId == -1) {
                 response = `There's no a cart with ID ${cartId}`
                 console.log(response)
                 return (response)
             } else {
-                newProduct.id = await this.assignId(cart.products);
-                newProduct.timestap = Date.now();
-                cart.products.push(newProduct)
-                data.splice(positionId, 1, cart);
-                await fs.promises.writeFile(this.fileName, JSON.stringify(data));
-                response = `The cart with ID ${cartId} has been updated`
-                console.log(response);
-                return response;
+                let productPositionId = await  this.checkIfIdExists(cart.products,productId);
+
+                if (productPositionId == -1 ){
+                    response = `There's no a product with ID ${productId}`
+                    console.log(response)
+                    return (response)
+                } else {
+                    const newProduct = data.products(productPositionId)
+                    cart.products.push(newProduct)
+                    data.splice(cartPositionId, 1, cart);
+                    await fs.promises.writeFile(this.fileName, JSON.stringify(data));
+                    response = `The product with ID ${productId} has been added to the cart with ID ${cartId}`
+                    console.log(response);
+                    return response;
+                }   
             }
         } catch(err) {
             console.log(err);
         }
     }
+
+    // async addProductToCart(newProduct, cartId, cart) {
+    //     try {
+    //         let data = await this.readFile();
+    //         let positionId = await  this.checkIfIdExists(data,cartId);
+    //         let response;
+            
+    //         if (positionId == -1) {
+    //             response = `There's no a cart with ID ${cartId}`
+    //             console.log(response)
+    //             return (response)
+    //         } else {
+    //             newProduct.id = await this.assignId(cart.products);
+    //             newProduct.timestap = Date.now();
+    //             cart.products.push(newProduct)
+    //             data.splice(positionId, 1, cart);
+    //             await fs.promises.writeFile(this.fileName, JSON.stringify(data));
+    //             response = `The cart with ID ${cartId} has been updated`
+    //             console.log(response);
+    //             return response;
+    //         }
+    //     } catch(err) {
+    //         console.log(err);
+    //     }
+    // }
+
 
     async deleteProductFromCart(idCart, idProd, cart) {
         try {

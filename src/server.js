@@ -7,6 +7,7 @@ Imports
 const express = require("express");
 const Container = require("./utils/container");
 const { Router } = express;
+const axios = require("axios").default;
 
 
 
@@ -57,10 +58,15 @@ app.use("/", routerFrontEnd);
 app.use(express.static(__dirname + "/../dist"));
 
 
-routerFrontEnd.get("/",  (req,res) => {
+routerFrontEnd.get("/", async (req,res) => {
+    const products = await axios.get("http://localhost:8080/api/products")
+    // console.log(products.data)
+    // console.log(Object.keys(products))
+    // .then(res => res.json())
+    // .then(product => {
     res.render("pages/index", {
         title: "Homepage",
-        message: "This is a message"
+        products: products.data
     })
 })
 

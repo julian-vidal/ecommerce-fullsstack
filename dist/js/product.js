@@ -11,17 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // Get product ID
 const queryString = window.location.pathname.split("/");
 const id = queryString[queryString.length - 1];
-console.log(id);
 fetch("http://localhost:8080/api/products/" + id)
     .then(res => res.json())
     .then(product => {
-    console.log(product);
+    // console.log(product)
     let html = "";
-    // for (let product of products ) {
     html += `
             <div class="col-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="${product.image}" class="card-img-top" alt="...">
+                <div class="card">
+                    <img src="${product.image}" class="card-img-top" alt="${product.name}">
                     <div class="card-body">
                       <h5 class="card-title">${product.name}</h5>
                       <p class="card-text">${product.description}</p>
@@ -50,8 +48,13 @@ fetch("http://localhost:8080/api/products/" + id)
                         <div class="row mb-3">
                             <div class="col-4">
                                 <label for="price" class="form-label">Price</label>
-                                <input type="number" class="form-control" id="price" value="${product.price}">
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" value="${product.price}">
+                                </div>                                
                             </div>
+
+
                             <div class="col-4">
                                 <label for="stock" class="form-label">Stock</label>
                                 <input type="number" class="form-control" id="stock" value="${product.stock}">
@@ -65,15 +68,15 @@ fetch("http://localhost:8080/api/products/" + id)
                     </form>
                 </div>
             `;
-    // }
-    document.getElementById("product-data").innerHTML = html;
-    document.getElementById("update").addEventListener("click", e => e.preventDefault());
+    let productHtml = document.getElementById("product-data");
+    productHtml ? productHtml.innerHTML = html : console.log("There's no an element with ID product-data");
 });
-// document.getElementById("update")?.
-// const updateProduct = () => console.log(document.getElementById("name").value)
-const helperUpdateProduct = (() => __awaiter(void 0, void 0, void 0, function* () {
+const helperUpdateProduct = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield fetch("http://localhost:8080/api/products/" + id, {
         method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
@@ -83,36 +86,4 @@ const helperUpdateProduct = (() => __awaiter(void 0, void 0, void 0, function* (
             sku: document.getElementById("sku").value,
         })
     });
-    console.log(response);
-}))();
-/*
-
-
-
-// Example POST method implementation:
-async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
-  
-  postData('https://example.com/answer', { answer: 42 })
-    .then((data) => {
-      console.log(data); // JSON data parsed by `data.json()` call
-    });
-  
-
-
-*/ 
+});
