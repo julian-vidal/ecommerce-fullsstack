@@ -7,9 +7,15 @@ class Container {
         this.fileName = fileName;
         this.createFileIfNotExists();
     }
-    async readFile() {
+    async readFile(fileName) {
+        console.log(`fileName = ${fileName}`)
+        let data
         try {
-            let data = await fs.promises.readFile(this.fileName, encoding);
+            if (fileName) {
+                data = await fs.promises.readFile(fileName, encoding)
+            } else {
+                data = await fs.promises.readFile(this.fileName, encoding)
+            }
             data = JSON.parse(data)
             return data;
         } catch (err) {
@@ -134,8 +140,6 @@ class Container {
     async addProductToCart(productId, cartId, cart) {
         try {
             let data = await this.readFile();
-            data.map(obj => console.log(`data.obj.products = ${ Object.keys(obj)}`))
-            // console.log(`data = ${Object.keys(data) }`)
             let cartPositionId = await  this.checkIfIdExists(data,cartId);
             let response;
             
@@ -144,15 +148,15 @@ class Container {
                 console.log(response)
                 return (response)
             } else {
-                let productPositionId = await  this.checkIfIdExists(cart.products,productId);
-
+                let products = await this.readFile("./products.json")
+                // console.log(products)
+                let productPositionId = await  this.checkIfIdExists(products,productId);
                 if (productPositionId == -1 ){
                     response = `There's no a product with ID ${productId}`
                     console.log(response)
                     return (response)
                 } else {
-                    const newProduct = data.products(productPositionId)
-                    cart.products.push(newProduct)
+                    cart.products.push(products[productPositionId])
                     data.splice(cartPositionId, 1, cart);
                     await fs.promises.writeFile(this.fileName, JSON.stringify(data));
                     response = `The product with ID ${productId} has been added to the cart with ID ${cartId}`
@@ -164,32 +168,6 @@ class Container {
             console.log(err);
         }
     }
-
-    // async addProductToCart(newProduct, cartId, cart) {
-    //     try {
-    //         let data = await this.readFile();
-    //         let positionId = await  this.checkIfIdExists(data,cartId);
-    //         let response;
-            
-    //         if (positionId == -1) {
-    //             response = `There's no a cart with ID ${cartId}`
-    //             console.log(response)
-    //             return (response)
-    //         } else {
-    //             newProduct.id = await this.assignId(cart.products);
-    //             newProduct.timestap = Date.now();
-    //             cart.products.push(newProduct)
-    //             data.splice(positionId, 1, cart);
-    //             await fs.promises.writeFile(this.fileName, JSON.stringify(data));
-    //             response = `The cart with ID ${cartId} has been updated`
-    //             console.log(response);
-    //             return response;
-    //         }
-    //     } catch(err) {
-    //         console.log(err);
-    //     }
-    // }
-
 
     async deleteProductFromCart(idCart, idProd, cart) {
         try {
