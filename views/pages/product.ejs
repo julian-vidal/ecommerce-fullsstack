@@ -79,7 +79,7 @@
     <section class="container pt-3">
         <div class="row">
             <div class="col">
-                <a href="http://localhost:8080/"> Back to all products</a>
+                <a href= <%= `http://localhost:${port}/` %> > Back to all products</a>
             </div>
         </div>
     </section>
@@ -89,8 +89,17 @@
     <script>
 
     const helperUpdateProduct =  async () => {
-        
-        const response = await fetch("http://localhost:8080/api/products/"+<%= product.id %>, {
+        <% 
+            let endpoint;
+            if(mode=="MONGO") {
+                endpoint = `http://localhost:${port}/api/products/${product._id}`
+            } else {
+                endpoint = `http://localhost:${port}/api/products/${product.id}`
+            }
+        %>
+
+
+        const response = await fetch("<%= endpoint %>", {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'

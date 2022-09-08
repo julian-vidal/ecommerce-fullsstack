@@ -5,9 +5,16 @@
 Imports
 ============================================*/
 const express = require("express");
-const Container = require("./utils/container");
+// import express from "express";
+// const Container = require("./utils/container");
 const { Router } = express;
 const axios = require("axios").default;
+
+const dotenv = require("dotenv") 
+dotenv.config()
+
+// import { Router } from express;
+// import axios from "axios";
 
 
 
@@ -17,7 +24,9 @@ Server setup
 ============================================*/
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8081;
+const MODE = process.env.MODE || "LOCAL";
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,8 +46,10 @@ Routes
 const routerCarts = require("./routes/carts");
 app.use("/api/carts", routerCarts);
 
-const routerProducts = require("./routes/products");
-app.use("/api/products", routerProducts);
+
+const ProductRoute = require("./routes/ProductRoute");
+// const routerProducts = require("./routes/products");
+app.use("/api/products", ProductRoute);
 
 
 
@@ -58,29 +69,35 @@ app.use("/", routerFrontEnd);
 // app.use(express.static(__dirname + "/../dist"));
 
 
+
 routerFrontEnd.get("/", async (req,res) => {
-    const products = await axios.get("http://localhost:8080/api/products")
+    const products = await axios.get(`http://localhost:${PORT}/api/products`)
     // console.log(products.data)
     // console.log(Object.keys(products))
     // .then(res => res.json())
     // .then(product => {
     res.render("pages/index", {
         title: "Homepage",
-        products: products.data
+        products: products.data,
+        port: PORT,
+        mode: MODE
     })
 })
 
 routerFrontEnd.get("/product/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const product = await axios.get(`http://localhost:8080/api/products/${id}`);
+        const product = await axios.get(`http://localhost:${PORT}/api/products/${id}`);
         // console.log(Object.keys(product) )
         res.render("pages/product", {
             title: `Product ID: ${req.params.id}`,
-            product: product.data 
+            product: product.data,
+            port: PORT,
+            mode: MODE
         })
     } catch (err) {
         console.log(err)
     }
     
 })
+
