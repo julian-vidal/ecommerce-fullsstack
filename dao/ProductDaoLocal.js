@@ -2,7 +2,7 @@ const Container = require("../utils/container");
 const products = new Container("./products.json");
 
 const find = async () => {
-    return products.readFile()
+    return await products.readFile()
 }
 
 const findOne = async id => {

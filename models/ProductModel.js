@@ -2,9 +2,6 @@ const dotenv = require("dotenv");
 const ProductDaoLocal = require("../dao/ProductDaoLocal");
 const ProductDaoMongo = require("../dao/ProductDaoMongo")
 
-// import dotenv from "dotenv";
-// import * as ProductDaoLocal from "../dao/ProductDaoLocal";
-
 dotenv.config()
 
 const MODE = process.env.MODE;
