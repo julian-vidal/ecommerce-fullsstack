@@ -52,17 +52,29 @@ const getProducts = async id => {
 const addProduct = async (id, idProd) => {
     id = mongoose.Types.ObjectId(id);
     idProd = mongoose.Types.ObjectId(idProd)
-    const cart = await Cart.findOne({_id: id})
     const product = await ProductDaoMongo.findOne(idProd)
-    // console.log(product) 
+
     return await Cart.updateOne({
         _id: id
     }, {
-        $set : {
-            products: cart.products.push(product)
+        $push : {
+            products: product
         }
     })
     
+}
+
+const deleteProduct = async (id, idProd) =>{
+    id = mongoose.Types.ObjectId(id)
+    idProd = mongoose.Types.ObjectId(idProd)
+
+    return await Cart.updateOne({
+        _id: id
+    }, {
+        $pull : {
+            products: {_id:idProd}
+        }
+    })
 }
 
 module.exports = {
@@ -71,5 +83,6 @@ module.exports = {
     insert,
     remove,
     getProducts,
-    addProduct
+    addProduct,
+    deleteProduct
 }

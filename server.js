@@ -70,12 +70,9 @@ app.use("/", routerFrontEnd);
 
 
 
+
 routerFrontEnd.get("/", async (req,res) => {
     const products = await axios.get(`http://localhost:${PORT}/api/products`)
-    // console.log(products.data)
-    // console.log(Object.keys(products))
-    // .then(res => res.json())
-    // .then(product => {
     res.render("pages/index", {
         title: "Homepage",
         products: products.data,
@@ -88,7 +85,6 @@ routerFrontEnd.get("/product/:id", async (req, res) => {
     const id = req.params.id;
     try {
         const product = await axios.get(`http://localhost:${PORT}/api/products/${id}`);
-        // console.log(Object.keys(product) )
         res.render("pages/product", {
             title: `Product ID: ${req.params.id}`,
             product: product.data,
