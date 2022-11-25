@@ -1,17 +1,15 @@
-// @ts-check
+
 
 // "use strict";
 /* ============================================
 Imports
 ============================================*/
 const express = require("express");
-// import express from "express";
 // const Container = require("./utils/container");
 const { Router } = express;
 const axios = require("axios").default;
 
-const dotenv = require("dotenv") 
-dotenv.config()
+require("dotenv").config()
 
 // import { Router } from express;
 // import axios from "axios";
@@ -39,6 +37,38 @@ server.on("error", err => console.log());
 const IS_ADMIN = true;
 const PERMSSION_ERROR_MSG = "You don't have permission to perform this action";
 
+const {isLoggedIn, isLoggedOut } = require("./utils/middlewares")
+
+
+/* ============================================
+Express Session
+============================================*/
+
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
+app.use(session({
+    store: new MongoStore({
+        mongoUrl: process.env.MONGO_URL_SESSIONS,
+        // ttl: 60*60*24,
+        // retries:0
+    }),
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true
+})) 
+
+/* ============================================
+Passport
+============================================*/
+
+const passport = require("passport");
+const logger = require("./utils/loggerConfig");
+require("./utils/passport")
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 /* ============================================
 Routes
@@ -51,8 +81,8 @@ const ProductRoute = require("./routes/ProductRoute");
 // const routerProducts = require("./routes/products");
 app.use("/api/products", ProductRoute);
 
-
-
+const UserRuote = require("./routes/UserRoute")
+app.use("/api/users", UserRuote)
 
 /* ============================================
 EJS setup
@@ -97,3 +127,78 @@ routerFrontEnd.get("/product/:id", async (req, res) => {
     
 })
 
+// Login
+routerFrontEnd.get("/login", (req,res) => {
+    try {
+        res.render("pages/login", {
+            title: "Login"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+routerFrontEnd.post(
+    "/login",
+    passport.authenticate("login", {
+        failureRedirect: "/error",
+        failureMessage: "Invalid username or password",
+        usernameField: "email",
+        passwordField: "password"
+    }), (req,res) => {
+        req.session.user = req.user
+        res.redirect("/account")
+    }
+
+)
+
+// Signup
+routerFrontEnd.post(
+    "/signup",
+    passport.authenticate("signup", {
+        failureRedirect: "/error",
+        failureMessage: "User already exists",
+        usernameField: "email",
+        passwordField: "password"
+    }), (req,res) => {
+        console.log(Object.keys(res))
+        res.redirect("/")
+    }
+)
+
+
+routerFrontEnd.get("/signup", isLoggedIn, (req,res) => {
+    res.render("pages/signup", {
+        title: "Sign up"
+    })
+})
+
+// Acoount
+routerFrontEnd.get("/account", isLoggedOut, (req,res) => {
+    res.render("pages/account",{
+        title: "Account",
+        email: req.user.email
+    })
+})
+
+
+// Logout
+routerFrontEnd.get("/logout", isLoggedOut, (req,res) => {
+    req.session.destroy()
+
+    req.logout(() => {
+        res.redirect("/login")
+    })
+} )
+
+// Error
+routerFrontEnd.get("/error", (req,res) => {
+    const {messages} = req.session
+    let error
+    typeof messages !== "undefined" ? error = messages[messages.length-1] : error = "Something went wrong"
+
+    res.render("pages/error",{
+        error,
+        title: "Error"
+    })
+})
