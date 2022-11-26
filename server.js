@@ -8,12 +8,9 @@ const express = require("express");
 // const Container = require("./utils/container");
 const { Router } = express;
 const axios = require("axios").default;
-
 require("dotenv").config()
 
-// import { Router } from express;
-// import axios from "axios";
-
+let {newUserAdminEmail, sendEmail2Admin} = require("./utils/nodemailerConfig")
 
 
 
@@ -104,7 +101,7 @@ app.use("/", routerFrontEnd);
 
 routerFrontEnd.get("/", async (req,res) => {
     const products = await axios.get(`http://localhost:${PORT}/api/products`)
-    logger.log("info", `User: ${req.user}`)
+    // logger.log("info", `User: ${req.user}`)
     res.render("pages/index", {
         title: "Homepage",
         products: products.data,
@@ -113,6 +110,17 @@ routerFrontEnd.get("/", async (req,res) => {
         user: req.user
     })
 })
+
+
+const handlePlusButton = (qty, stock) => {
+    if (qty < stock) {
+        return qty += 1
+    } 
+}
+
+const test = () => {
+    logger.log("info", "Working!")
+}
 
 routerFrontEnd.get("/product/:id", async (req, res) => {
     const id = req.params.id;
@@ -123,7 +131,9 @@ routerFrontEnd.get("/product/:id", async (req, res) => {
             product: product.data,
             port: PORT,
             mode: MODE,
-            user: req.user
+            user: req.user,
+            qty: 1,
+            test
         })
     } catch (err) {
         console.log(err)
@@ -162,8 +172,19 @@ routerFrontEnd.post(
         failureMessage: "User already exists",
         usernameField: "email",
         passwordField: "password"
-    }), (req,res) => {
-        console.log(Object.keys(res))
+    }), async (req,res) => {
+        newUserAdminEmail.subject = `New customer registered: ${req.body.first_name} ${req.body.last_name} (${req.body.email})`
+        newUserAdminEmail.html = `
+        Hi,<br><br>
+        A new customer registered:<br>
+        Name: ${req.body.first_name} ${req.body.last_name}<br>
+        Email: ${req.body.email}<br>
+        Address: ${req.body.address}<br>
+        Age: ${req.body.age}<br>
+        Phone Number: ${req.body.phone_number}
+        `
+        const emailRes = await sendEmail2Admin(newUserAdminEmail)
+        logger.log("info", `New user registered: ${req.body.email}`)
         res.redirect("/")
     }
 )
@@ -176,13 +197,14 @@ routerFrontEnd.get("/signup", isLoggedIn, (req,res) => {
     })
 })
 
-// Acoount
+// Account
 routerFrontEnd.get("/account", isLoggedOut, (req,res) => {
     res.render("pages/account",{
         title: "Account",
         email: req.user.email,
         user: req.user
     })
+    logger.log("info", req.user)
 })
 
 

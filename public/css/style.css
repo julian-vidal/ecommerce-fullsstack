@@ -18,3 +18,26 @@ body {
 body main {
     min-height: 87vh;
 }
+
+.card.shadow:hover {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.5)!important;
+    transition: .3s;
+}
+
+
+/* Product Layout */
+.qtyField {
+    max-width: 90px;
+    background-color: #fff;
+    border: 1px solid var(--bs-gray-400);
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+
+.qtyField input {
+    border: none;
+    max-width: 30px;
+    text-align: center;
+}

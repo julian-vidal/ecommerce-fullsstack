@@ -15,7 +15,9 @@ passport.use(
             const user = await getOneUser(email)
 
             if (!user || !comparePassword(password, user.password)){
-                return done(null, false, {message: "User doesn't exist or password doesn't match"})
+                const message = "User doesn't exist or password doesn't match"
+                logger.log("error", message)
+                return done(null, false, {message})
             }
             return done(null, user)
 
