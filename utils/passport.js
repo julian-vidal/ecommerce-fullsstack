@@ -1,6 +1,5 @@
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy;
-// const {User} = require("../dao/UserDaoMongo")
 const {User, getOneUser} = require("../controllers/UserController")
 const {comparePassword, hashPassword} = require("./bcrypt")
 const {Types} = require("mongoose")

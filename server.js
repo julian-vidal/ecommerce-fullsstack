@@ -39,6 +39,7 @@ const PERMSSION_ERROR_MSG = "You don't have permission to perform this action";
 
 const {isLoggedIn, isLoggedOut } = require("./utils/middlewares")
 
+app.use(express.static(__dirname + "/public"))
 
 /* ============================================
 Express Session
@@ -103,11 +104,13 @@ app.use("/", routerFrontEnd);
 
 routerFrontEnd.get("/", async (req,res) => {
     const products = await axios.get(`http://localhost:${PORT}/api/products`)
+    logger.log("info", `User: ${req.user}`)
     res.render("pages/index", {
         title: "Homepage",
         products: products.data,
         port: PORT,
-        mode: MODE
+        mode: MODE,
+        user: req.user
     })
 })
 
@@ -119,7 +122,8 @@ routerFrontEnd.get("/product/:id", async (req, res) => {
             title: `Product ID: ${req.params.id}`,
             product: product.data,
             port: PORT,
-            mode: MODE
+            mode: MODE,
+            user: req.user
         })
     } catch (err) {
         console.log(err)
@@ -128,14 +132,12 @@ routerFrontEnd.get("/product/:id", async (req, res) => {
 })
 
 // Login
-routerFrontEnd.get("/login", (req,res) => {
-    try {
-        res.render("pages/login", {
-            title: "Login"
-        })
-    } catch (error) {
-        console.log(error)
-    }
+routerFrontEnd.get("/login", isLoggedIn, (req,res) => {
+    
+    res.render("pages/login", {
+        title: "Login",
+        user: req.user
+    })
 })
 
 routerFrontEnd.post(
@@ -169,7 +171,8 @@ routerFrontEnd.post(
 
 routerFrontEnd.get("/signup", isLoggedIn, (req,res) => {
     res.render("pages/signup", {
-        title: "Sign up"
+        title: "Sign up",
+        user: req.user
     })
 })
 
@@ -177,7 +180,8 @@ routerFrontEnd.get("/signup", isLoggedIn, (req,res) => {
 routerFrontEnd.get("/account", isLoggedOut, (req,res) => {
     res.render("pages/account",{
         title: "Account",
-        email: req.user.email
+        email: req.user.email,
+        user: req.user
     })
 })
 
@@ -199,6 +203,7 @@ routerFrontEnd.get("/error", (req,res) => {
 
     res.render("pages/error",{
         error,
-        title: "Error"
+        title: "Error",
+        user: req.user
     })
 })

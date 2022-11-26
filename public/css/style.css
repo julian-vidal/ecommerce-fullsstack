@@ -1,0 +1,20 @@
+:root {
+    --bs-primary: #F08A5D;
+    --bs-link-color: var(--bs-primary);
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+body {
+    background-color: var(--bs-gray-100) ;
+    
+}
+
+body main {
+    min-height: 87vh;
+}
