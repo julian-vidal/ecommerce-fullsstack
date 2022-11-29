@@ -1,3 +1,5 @@
+const compression = require("compression")
+
 const isLoggedOut = (req, res, next) => {
     if(!req.isAuthenticated()) {
         return res.redirect("/login")
@@ -12,7 +14,10 @@ const isLoggedIn = (req, res, next) => {
     next()
 }
 
+const gzipMiddleware = compression()
+
 module.exports = {
     isLoggedIn,
-    isLoggedOut
+    isLoggedOut,
+    gzipMiddleware
 }

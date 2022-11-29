@@ -7,16 +7,34 @@ Imports
 const express = require("express");
 // const Container = require("./utils/container");
 const { Router } = express;
-const axios = require("axios").default;
 require("dotenv").config()
-
+const cluster = require("cluster")
+const {cpus} = require("os")
+const logger = require("./utils/loggerConfig");
 let {newUserAdminEmail, sendEmail2Admin} = require("./utils/nodemailerConfig")
-
-
+const {isLoggedIn, isLoggedOut, gzipMiddleware } = require("./utils/middlewares")
+const ProductModel = require("./models/ProductModel");
 
 /* ============================================
 Server setup
 ============================================*/
+const numCPUs = cpus().length
+/*
+if (cluster.isPrimary) {
+    logger.log("info", `Cluster started. CPUS: ${numCPUs}`)
+    logger.log("info", `PID: ${process.pid}`)
+    for (let i=0; i<numCPUs; i++) {
+        cluster.fork()
+    }
+
+    cluster.on("exit", worker => {
+        logger.log("warn", `Worker ${worker.process.pid} died`)
+    })
+} else {
+
+}
+*/
+
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -27,14 +45,14 @@ app.use(express.urlencoded({ extended: true }));
 
 
 const server = app.listen(PORT, () => {
-    console.log(`Server is listening at port ${PORT}`);
+    logger.log("info", `Server is listening at port ${PORT}`)
 });
-server.on("error", err => console.log());
+server.on("error", err => logger.log("error", err ));
 
 const IS_ADMIN = true;
 const PERMSSION_ERROR_MSG = "You don't have permission to perform this action";
 
-const {isLoggedIn, isLoggedOut } = require("./utils/middlewares")
+
 
 app.use(express.static(__dirname + "/public"))
 
@@ -61,7 +79,6 @@ Passport
 ============================================*/
 
 const passport = require("passport");
-const logger = require("./utils/loggerConfig");
 require("./utils/passport")
 
 app.use(passport.initialize())
@@ -76,7 +93,6 @@ app.use("/api/carts", routerCarts);
 
 
 const ProductRoute = require("./routes/ProductRoute");
-// const routerProducts = require("./routes/products");
 app.use("/api/products", ProductRoute);
 
 const UserRuote = require("./routes/UserRoute")
@@ -97,43 +113,28 @@ app.use("/", routerFrontEnd);
 // app.use(express.static(__dirname + "/../dist"));
 
 
-
-
 routerFrontEnd.get("/", async (req,res) => {
-    const products = await axios.get(`http://localhost:${PORT}/api/products`)
-    // logger.log("info", `User: ${req.user}`)
+    const products = await ProductModel.getAll()
     res.render("pages/index", {
         title: "Homepage",
-        products: products.data,
+        products,
         port: PORT,
         mode: MODE,
         user: req.user
     })
 })
 
-
-const handlePlusButton = (qty, stock) => {
-    if (qty < stock) {
-        return qty += 1
-    } 
-}
-
-const test = () => {
-    logger.log("info", "Working!")
-}
-
 routerFrontEnd.get("/product/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const product = await axios.get(`http://localhost:${PORT}/api/products/${id}`);
+        const product = await ProductModel.getOne(id)
         res.render("pages/product", {
-            title: `Product ID: ${req.params.id}`,
-            product: product.data,
+            title: `Product ID: ${id}`,
+            product,
             port: PORT,
             mode: MODE,
             user: req.user,
             qty: 1,
-            test
         })
     } catch (err) {
         console.log(err)
@@ -183,7 +184,7 @@ routerFrontEnd.post(
         Age: ${req.body.age}<br>
         Phone Number: ${req.body.phone_number}
         `
-        const emailRes = await sendEmail2Admin(newUserAdminEmail)
+        await sendEmail2Admin(newUserAdminEmail)
         logger.log("info", `New user registered: ${req.body.email}`)
         res.redirect("/")
     }

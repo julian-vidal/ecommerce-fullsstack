@@ -44,7 +44,13 @@ passport.use(
         const newUser = new User({
             email,
             password: hashedPassword,
-            role: "CUSTOMER"
+            role: "CUSTOMER",
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            address: req.body.address,
+            age: req.body.age,
+            phone_number: req.body.phone_number,
+            photo: req.body.photo,
         })
 
         await newUser.save()
