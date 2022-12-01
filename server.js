@@ -166,6 +166,8 @@ routerFrontEnd.post(
 )
 
 // Signup
+
+const multer =  require("./routes/FrontEndRoute")
 routerFrontEnd.post(
     "/signup",
     passport.authenticate("signup", {
@@ -173,7 +175,9 @@ routerFrontEnd.post(
         failureMessage: "User already exists",
         usernameField: "email",
         passwordField: "password"
-    }), async (req,res) => {
+    }),
+    multer.single("photo")
+    , async (req,res) => {
         newUserAdminEmail.subject = `New customer registered: ${req.body.first_name} ${req.body.last_name} (${req.body.email})`
         newUserAdminEmail.html = `
         Hi,<br><br>

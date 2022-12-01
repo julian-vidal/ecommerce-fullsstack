@@ -2,7 +2,7 @@ const multer = require("multer")
 
 let storage = multer.diskStorage({
     destination: function(req,res,cb) {
-        cb(null, "uploads")
+        cb(null, "public/uploads")
     },
     filename: function(req,file,cb) {
         let extension = this.filename.split(".")[this.filename.length-1]
@@ -15,4 +15,4 @@ let upload = multer({
     storage
 })
 
-upload.post()
+module.exports = upload
