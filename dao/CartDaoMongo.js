@@ -16,7 +16,8 @@ if (MONGO_URL) {
 }
 
 const CartSchema = new mongoose.Schema({
-    products: {type: Array, required: false}
+    products: {type: Array, required: false},
+    user: {type: String, required: false}
 }, {timestamps: true})
 
 const Cart = mongoose.model("carts", CartSchema)
@@ -30,8 +31,19 @@ const findOne = async id => {
     return await Cart.findOne({_id: id})
 }
 
-const insert = async newCart => {
-    newCart.products = []
+// Creates a new cart object
+const insert = async userId => {
+    let user = userId;
+    
+    if(typeof userId === "undefined") {
+        user = "anonymus"
+    }
+   
+    let newCart = {
+        user,
+        products: []
+    }
+    
     const cart = new Cart(newCart);
     return await cart.save();
 }
@@ -49,18 +61,27 @@ const getProducts = async id => {
     return response.products
 }
 
-const addProduct = async (id, idProd) => {
+const addProduct = async (id, productId, qty) => {
     id = mongoose.Types.ObjectId(id);
-    idProd = mongoose.Types.ObjectId(idProd)
-    const product = await ProductDaoMongo.findOne(idProd)
+    let cart = await findOne(id)
+    cart = Cart(cart)
 
-    return await Cart.updateOne({
-        _id: id
-    }, {
-        $push : {
-            products: product
-        }
+    if(cart.products.length > 0) {
+        let existingProduct = cart.products.find(product => product.id == productId)
+
+        if (existingProduct){    
+            const indexToUpdate = cart.products.findIndex(product => product.id === productId )
+            cart.products[indexToUpdate].qty += qty
+            return await cart.save()
+        } 
+    }
+
+    cart.products.push({
+        id: productId,
+        qty
     })
+    
+    return await cart.save()
     
 }
 

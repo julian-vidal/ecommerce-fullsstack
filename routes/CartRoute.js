@@ -8,7 +8,7 @@ routerCarts.get("/:id", getOneCart);
 routerCarts.post("/", insertCart);
 routerCarts.delete("/:id", deleteCart);
 routerCarts.get("/:id/products", getProducts);
-routerCarts.post("/:id/products/:idProd", addProduct);
+routerCarts.post("/:id/products", addProduct);
 routerCarts.delete("/:id/products/:idProd", deleteProduct);
 
 

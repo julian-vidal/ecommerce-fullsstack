@@ -26,8 +26,8 @@ const getOne = id => {
     return CartDao.findOne(id)
 }
 
-const insert = cart => {
-    return CartDao.insert(cart)
+const insert = userId => {
+    return CartDao.insert(userId)
 }
 
 const remove = id => {
@@ -38,8 +38,8 @@ const getProducts = id => {
     return CartDao.getProducts(id)
 }
 
-const addProduct = (id, idProd) => {
-    return CartDao.addProduct(id, idProd)
+const addProduct = (id, productId, qty) => {
+    return CartDao.addProduct(id, productId, qty)
 }
 
 const deleteProduct = (id, idProd) => {
