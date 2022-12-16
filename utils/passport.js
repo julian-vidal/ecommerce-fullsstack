@@ -35,9 +35,11 @@ passport.use(
         passwordField: "password"
     }, async (req, email, password, done) => {
         const user = await getOneUser(email)
+        // console.log({reqBody: req.body})
 
         if(user) {
-            return done(null, false, {message: "User already exists"})
+            // console.log({user})
+            return done(null, false, {message: "User already exists!!"})
         }
 
         const hashedPassword = hashPassword(password)

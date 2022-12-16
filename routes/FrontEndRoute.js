@@ -5,7 +5,8 @@ let storage = multer.diskStorage({
         cb(null, "public/uploads")
     },
     filename: function(req,file,cb) {
-        let extension = this.filename.split(".")[this.filename.length-1]
+        console.log("Executing filename", file);
+        let extension = file.originalname.split(".")[file.originalname.length-1]
         cb(null, `${req.body.email}.${extension}`)
     }
 })

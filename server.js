@@ -172,12 +172,13 @@ routerFrontEnd.post(
     "/signup",
     passport.authenticate("signup", {
         failureRedirect: "/error",
-        failureMessage: "User already exists",
+        // failureMessage: "User already exists",
         usernameField: "email",
         passwordField: "password"
     }),
-    multer.single("photo")
-    , async (req,res) => {
+    multer.single("photo"),
+    async (req,res) => {
+        console.log("Aqui todo bien")
         newUserAdminEmail.subject = `New customer registered: ${req.body.first_name} ${req.body.last_name} (${req.body.email})`
         newUserAdminEmail.html = `
         Hi,<br><br>
