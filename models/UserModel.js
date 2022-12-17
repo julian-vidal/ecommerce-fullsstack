@@ -5,7 +5,7 @@ const UserDaoMongo = require("../dao/UserDaoMongo")
 
 UserDao = UserDaoMongo
 
-const User = UserDao.User
+// const User = UserDao.User
 
 const getAll = () => {
     return UserDao.find()
@@ -28,7 +28,6 @@ const remove = id => {
 }
 
 module.exports = {
-    User,
     getAll,
     getOne,
     insert,

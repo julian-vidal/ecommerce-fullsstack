@@ -13,3 +13,36 @@ handleMinusButton = function() {
         inputQty.setAttribute("value", qty -= 1)
     } 
 }
+
+const addProductToCartMsg = (status) => {
+    let message
+
+    if(status === 200) {
+        message = document.getElementById("success-message")
+    } else {
+        message = document.getElementById("error-message")
+    }
+
+    message.classList.remove("visually-hidden")
+}
+
+const addProductToCart = async () => {
+    const cartId = "639d00f9d7caefccd2c90e6b"
+    let productId = window.location.pathname.split("/")[2]
+    const qty = parseInt(document.getElementById("quantity").value)
+
+    let url = `${window.location.origin}/api/carts/${cartId}/products`
+    let options = {
+        method: "POST",
+        body: JSON.stringify({
+            id: productId,
+            qty
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const res = await fetch(url, options)
+    addProductToCartMsg(res.status)
+}

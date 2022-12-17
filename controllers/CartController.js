@@ -59,7 +59,6 @@ const getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
     let {id, qty} = req.body
 
-    // console.log({qty})
     try {
         const cart = await CartModel.addProduct(req.params.id, id, qty)
         return res.json(cart)

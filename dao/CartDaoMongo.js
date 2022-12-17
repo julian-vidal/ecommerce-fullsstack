@@ -1,10 +1,6 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const mongoose = require("mongoose");
 const ProductDaoMongo = require("./ProductDaoMongo");
-
-
-
-dotenv.config()
 
 const MONGO_URL = process.env.MONGO_URL
 
@@ -85,10 +81,21 @@ const addProduct = async (id, productId, qty) => {
     
 }
 
-const deleteProduct = async (id, idProd) =>{
+const deleteProduct = async (id, productId) =>{
     id = mongoose.Types.ObjectId(id)
-    idProd = mongoose.Types.ObjectId(idProd)
+    let cart = await findOne(id)
+    cart = Cart(cart)
 
+    if(cart.products.length > 0) {
+        let existingProduct = cart.products.find(product => product.id == productId)
+
+        if (existingProduct){    
+            const indexToUpdate = cart.products.findIndex(product => product.id === productId )
+            cart.products.splice(indexToUpdate, 1)
+            return await cart.save()
+        } 
+    }
+/*
     return await Cart.updateOne({
         _id: id
     }, {
@@ -96,6 +103,8 @@ const deleteProduct = async (id, idProd) =>{
             products: {_id:idProd}
         }
     })
+
+    */
 }
 
 module.exports = {

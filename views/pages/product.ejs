@@ -19,14 +19,16 @@
                 <hr>
                 <p class="fs-3 fw-bold">$<%=product.price%></p>
 
-                <div class="d-flex">
+                <div class="d-flex mb-3" id="qtyContainer">
                     <div class="qtyField me-3 rounded">
                         <button class="btn no-shadow" onclick="handleMinusButton()">-</button>
                         <input readonly id="quantity" value=1>
                         <button class="btn no-shadow" onclick="handlePlusButton(<%= product.stock %>)">+</button>
                     </div>
-                    <button class="btn btn-primary">Add to cart</button>
+                    <button class="btn btn-primary" onclick="addProductToCart()">Add to cart</button>
                 </div>
+
+                <%- include("../partials/addToCartMessage") %> 
                 
             </div>
                

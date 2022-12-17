@@ -1,8 +1,8 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const CartDaoLocal = require("../dao/CartDaoLocal");
 const CartDaoMongo = require("../dao/CartDaoMongo");
 
-dotenv.config()
+
 
 const MODE = process.env.MODE;
 

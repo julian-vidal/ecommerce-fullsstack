@@ -26,12 +26,13 @@ const find = async() => {
 }
 
 const findOne = async email => {
-    // id = mongoose.Types.ObjectId(id)
     return await User.findOne({email})
 }
 
 const insert = async newUser => {
-    newUser.age = parseInt(newUser.age)
+    if(newUser.age) {
+        newUser.age = parseInt(newUser.age)
+    }
     const user = new User(newUser)
     return await user.save()
 }
@@ -66,7 +67,6 @@ const remove = async id => {
 }
 
 module.exports = {
-    User,
     find,
     findOne,
     insert,
