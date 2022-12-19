@@ -27,7 +27,7 @@ const addProductToCartMsg = (status) => {
 }
 
 const addProductToCart = async () => {
-    const cartId = "639d00f9d7caefccd2c90e6b"
+    const cartId = "639df2472d5bdb8ca06f42c7"
     let productId = window.location.pathname.split("/")[2]
     const qty = parseInt(document.getElementById("quantity").value)
 

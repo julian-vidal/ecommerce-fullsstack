@@ -20,18 +20,23 @@ const isLoggedIn = (req, res, next) => {
     next()
 }
 
+// Gzip
 const gzipMiddleware = compression()
 
 // Passport 
-const passportLogin = (req,res, next) => {
-    passport.authenticate("login", {
-        failureRedirect: "/error",
-        failureMessage: "Invalid username or password",
-        usernameField: "email",
-        passwordField: "password"
-    })
-    next()
-}
+const passportLogin = passport.authenticate("login", {
+    failureRedirect: "/error",
+    failureMessage: "Invalid username or password",
+    usernameField: "email",
+    passwordField: "password"
+})
+
+const passportSignup = passport.authenticate("signup", {
+    failureRedirect: "/error",
+    failureMessage: "User already exists",
+    usernameField: "email",
+    passwordField: "password"
+})
 
 
 // Multer
@@ -56,5 +61,6 @@ module.exports = {
     isLoggedOut,
     gzipMiddleware,
     passportLogin,
+    passportSignup,
     upload
 }

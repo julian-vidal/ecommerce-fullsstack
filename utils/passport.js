@@ -33,7 +33,7 @@ passport.use(
         passReqToCallback: true,
         usernameField: "email",
         passwordField: "password"
-    }, async (req,email,password, done) => {
+    }, async (req, _email, _password, done) => {
         const user = await createUser(req)
         return done(null, user)
     })

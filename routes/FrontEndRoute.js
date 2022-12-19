@@ -1,8 +1,6 @@
-
-
 // Router
 const {Router} = require("express")
-const {isLoggedIn, isLoggedOut, passportLogin, upload: multer} = require("../utils/middlewares")
+const {isLoggedIn, isLoggedOut, passportLogin, passportSignup, upload: multer} = require("../utils/middlewares")
 const passport = require("passport")
 require("../utils/passport")
 
@@ -21,51 +19,8 @@ routerFrontEnd.get("/error", error)
 
 
 // POST Requests
-
-routerFrontEnd.post(
-    "/login",
-    passport.authenticate("login", {
-        failureRedirect: "/error",
-        failureMessage: "Invalid username or password",
-        usernameField: "email",
-        passwordField: "password"
-    }),
-    postLogin
-)
+routerFrontEnd.post("/login",passportLogin,postLogin)
+routerFrontEnd.post("/signup",[multer.single("photo"),passportSignup,],postSignup)
 
 
-// routerFrontEnd.post("/login",passportLogin,postLogin)
-
-
-
-// Without multer
-
-routerFrontEnd.post(
-    "/signup",
-    passport.authenticate("signup", {
-        failureRedirect: "/error",
-        // failureMessage: "User already exists",
-        usernameField: "email",
-        passwordField: "password"
-    }),
-    postSignup
-)
-
-
-// With multer
-/*
-routerFrontEnd.post(
-    "/signup",
-    [
-        passport.authenticate("signup", {
-            failureRedirect: "/error",
-            // failureMessage: "User already exists",
-            usernameField: "email",
-            passwordField: "password"
-        }),
-        multer.single("photo")
-    ],
-    postSignup
-)
-*/
 module.exports = routerFrontEnd
