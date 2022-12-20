@@ -87,7 +87,8 @@ const postLogin = (req, res) => {
 }
 
 const postSignup = async (req,res) => {
-    const {first_name, last_name, email, address, age, phone_number} = req.body;
+    const {first_name, last_name, email, address, age, phone_number, photo} = req.body;
+    console.log({reqBody: req.body});
     await newUserAdminEmail(first_name, last_name, email, address, age, phone_number)
     logger.log("info", `New user registered: ${first_name, last_name, email, address, age, phone_number}`)
     res.redirect("/account")

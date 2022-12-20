@@ -3,6 +3,7 @@ const compression = require("compression")
 const passport = require("passport")
 require("../utils/passport")
 const multer = require("multer")
+const logger = require("./loggerConfig")
 
 // Check if contact is logged in, if not redirects to the login page
 const isLoggedOut = (req, res, next) => {
@@ -45,16 +46,13 @@ let storage = multer.diskStorage({
         cb(null, "public/uploads")
     },
     filename: function(req,file,cb) {
-        console.log("Executing filename", file);
-        let extension = file.originalname.split(".")[file.originalname.length-1]
+        let extension = file.mimetype.split("/")["1"]
         cb(null, `${req.body.email}.${extension}`)
     }
 })
 
 
 let upload = multer({storage})
-
-
 
 module.exports = {
     isLoggedIn,

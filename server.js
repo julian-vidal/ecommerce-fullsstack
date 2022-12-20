@@ -6,14 +6,10 @@ Imports
 ============================================*/
 const express = require("express");
 // const Container = require("./utils/container");
-const { Router } = express;
 require("dotenv").config()
 const cluster = require("cluster")
 const {cpus} = require("os")
 const logger = require("./utils/loggerConfig");
-let {newUserAdminEmail, sendEmail2Admin} = require("./utils/nodemailerConfig")
-const {isLoggedIn, isLoggedOut, gzipMiddleware } = require("./utils/middlewares")
-const ProductModel = require("./models/ProductModel");
 
 /* ============================================
 Server setup
