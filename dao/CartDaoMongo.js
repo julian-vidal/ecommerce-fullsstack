@@ -1,8 +1,9 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const ProductDaoMongo = require("./ProductDaoMongo");
+const SessionDaoMongo = require("./SessionDaoMongo")
 
-const MONGO_URL = process.env.MONGO_URL
+const {MONGO_URL} = process.env
 
 // let db;
 

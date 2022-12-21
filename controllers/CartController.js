@@ -56,8 +56,16 @@ const getProducts = async (req, res) => {
     }
 }
 
+const getUserBySession = async (req,res) => {
+    
+}
+
 const addProduct = async (req, res) => {
     let {id, qty} = req.body
+    // console.log(Object.keys(req))
+
+    console.log({sessionID: req.sessionID})
+    
 
     try {
         const cart = await CartModel.addProduct(req.params.id, id, qty)

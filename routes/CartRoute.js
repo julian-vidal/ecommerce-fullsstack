@@ -9,6 +9,7 @@ routerCarts.post("/", insertCart);
 routerCarts.delete("/:id", deleteCart);
 routerCarts.get("/:id/products", getProducts);
 routerCarts.post("/:id/products", addProduct);
+routerCarts.post("/products", addProduct);
 routerCarts.delete("/:id/products/:idProd", deleteProduct);
 
 

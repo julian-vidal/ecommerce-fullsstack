@@ -102,3 +102,6 @@ app.use("/api/users", UserRuote)
 
 const routerFrontEnd = require("./routes/FrontEndRoute")
 app.use("/", routerFrontEnd);
+
+const routerSession = require("./routes/SessionRoute")
+app.use("/api/session", routerSession)

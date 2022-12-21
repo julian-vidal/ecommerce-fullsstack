@@ -26,6 +26,17 @@ const addProductToCartMsg = (status) => {
     message.classList.remove("visually-hidden")
 }
 
+const getSession = async () => {
+    let url = `${window.location.origin}/api/session/`
+    const options = {
+        method: "GET",
+        credentials: "include"
+    }
+    const res = await fetch(url, options)
+
+    console.log(res.body)
+}
+
 const addProductToCart = async () => {
     const cartId = "639df2472d5bdb8ca06f42c7"
     let productId = window.location.pathname.split("/")[2]
@@ -40,9 +51,12 @@ const addProductToCart = async () => {
         }),
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: "include"
     }
 
     const res = await fetch(url, options)
+
+    console.log(res)
     addProductToCartMsg(res.status)
 }
