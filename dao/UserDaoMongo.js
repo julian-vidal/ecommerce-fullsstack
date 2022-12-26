@@ -16,7 +16,8 @@ const UserSchema = new mongoose.Schema({
     age: {type: Number, required: false },
     phone_number:{type: String, required: false},
     photo: {type: String, required: false},
-    role: {type: String, required: false}
+    role: {type: String, required: false},
+    cart_id: {type: String, required: false}
 }, {timestamps: true})
 
 const User = mongoose.model("users", UserSchema)
@@ -27,6 +28,10 @@ const find = async() => {
 
 const findOne = async email => {
     return await User.findOne({email})
+}
+
+const findById = async id => {
+    return await User.findOne({_id: id})
 }
 
 const insert = async newUser => {
@@ -58,6 +63,23 @@ const update = async (id, user) => {
     })
 }
 
+const saveCartId = async (userId, cartId) => {
+
+    try {
+        const res = await User.updateOne({
+            _id: userId
+        }, {
+            $set: {
+                cart_id:cartId
+            }
+        })
+        return res
+    } catch (error) {
+        return error
+    }
+    
+}
+
 const remove = async id => {
     id = mongoose.Types.ObjectId(id)
 
@@ -71,7 +93,9 @@ module.exports = {
     findOne,
     insert,
     update,
-    remove
+    remove,
+    findById,
+    saveCartId
 }
 
 // module.exports = User

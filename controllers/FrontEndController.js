@@ -24,6 +24,7 @@ const singleProduct = async(req,res) => {
     const id = req.params.id;
     try {
         const product = await getOne(id)
+        // console.log({product});
         res.render("pages/product", {
             title: `Product ID: ${id}`,
             product,

@@ -1,12 +1,8 @@
 const SessionModel = require("../models/SessionModel")
 
-const getOneSession = async (req, res) => {
+const getUserId = async (req, res) => {
     try {
-        console.log("SessionID: " + req.sessionID)
-        // console.log(typeof req.sessionID); 
-        const session = await SessionModel.getOne(`${req.sessionID}`)
-        console.log({session})
-        return res.json(session)
+        return await SessionModel.getUserId(req.sessionID)
     } catch (error) {
         return res
             .status(400)
@@ -15,5 +11,5 @@ const getOneSession = async (req, res) => {
 }
 
 module.exports = {
-    getOneSession
+    getUserId
 }

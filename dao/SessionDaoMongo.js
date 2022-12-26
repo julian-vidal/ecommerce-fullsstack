@@ -9,29 +9,24 @@ if (MONGO_URL) {
 
 const SessionSchema = new mongoose.Schema({
     expires: {type: Object},
-    session: {type: String }
+    session: {type: String },
+    _id: {type: String}
 })
 
 const Session = mongoose.model("sessions", SessionSchema)
 
-const findOne = async id => {
+const getUserId = async id => {
     try {
-        console.log(`findOne DAO: ${id} `)
-        const isValid = mongoose.Types.ObjectId.isValid(id)
-        console.log({isValid})
-        const _id = new mongoose.Types.ObjectId(id)
-        // console.log(`id = ${_id}`);
-        // console.log(`typeof id: ${typeof id}`)
-        const res = await Session.findOne({_id})
-        console.log("res:", res);
-        return res
+        const res = await Session.findOne({_id:id})
+        const passport = JSON.parse(res.session)
+        // console.log({user: passport.user._id}); 
+        return passport.user._id
     } catch (error) {
         console.log(error)
     }
-    // console.log("Hello")
     
 }
 
 module.exports = {
-    findOne
+    getUserId
 }

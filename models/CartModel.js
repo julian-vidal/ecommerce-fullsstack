@@ -46,6 +46,12 @@ const deleteProduct = (id, idProd) => {
     return CartDao.deleteProduct(id, idProd)
 }
 
+const addProductFrontEnd = (sessionID, productId, qty) => {
+    return CartDao.addProductFrontEnd(sessionID, productId, qty)
+}
+
+
+
 module.exports = {
     getAll,
     getOne,
@@ -53,5 +59,6 @@ module.exports = {
     remove,
     getProducts,
     addProduct,
-    deleteProduct
+    deleteProduct,
+    addProductFrontEnd
 }

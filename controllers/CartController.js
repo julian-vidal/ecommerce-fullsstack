@@ -56,8 +56,12 @@ const getProducts = async (req, res) => {
     }
 }
 
-const getUserBySession = async (req,res) => {
-    
+const addProductFrontEnd = async (req,res) => {
+    // sessionID, productId, qty
+    const {sessionID} = req
+    const {productId, qty} = req.body
+    const myres = await CartModel.addProductFrontEnd(sessionID, productId, qty )
+    return res.json({myres})
 }
 
 const addProduct = async (req, res) => {
@@ -97,5 +101,6 @@ module.exports = {
     deleteCart,
     getProducts,
     addProduct,
-    deleteProduct
+    deleteProduct,
+    addProductFrontEnd
 }

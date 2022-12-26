@@ -8,10 +8,10 @@ let SessionDao;
 
 SessionDao = SessionDaoMongo
 
-const getOne = id => {
-    return SessionDao.findOne(id)
+const getUserId = id => {
+    return SessionDao.getUserId(id)
 }
 
 module.exports = {
-    getOne
+    getUserId
 }

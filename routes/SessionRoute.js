@@ -1,9 +1,9 @@
 const {Router} = require("express")
 
-const {getOneSession} = require("../controllers/SessionController")
+const {getUserId} = require("../controllers/SessionController")
 
 const routerSession = Router()
 
-routerSession.get("/", getOneSession)
+routerSession.get("/", getUserId)
 
 module.exports = routerSession

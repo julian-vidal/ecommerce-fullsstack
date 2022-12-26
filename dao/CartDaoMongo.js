@@ -1,7 +1,9 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+const logger = require("../utils/loggerConfig");
 const ProductDaoMongo = require("./ProductDaoMongo");
-const SessionDaoMongo = require("./SessionDaoMongo")
+const SessionDaoMongo = require("./SessionDaoMongo");
+const UserDaoMongo = require("./UserDaoMongo")
 
 const {MONGO_URL} = process.env
 
@@ -31,6 +33,7 @@ const findOne = async id => {
 // Creates a new cart object
 const insert = async userId => {
     let user = userId;
+    // console.log({userId});
     
     if(typeof userId === "undefined") {
         user = "anonymus"
@@ -82,6 +85,52 @@ const addProduct = async (id, productId, qty) => {
     
 }
 
+const associateCartToUser = async userId => {
+    let cartId = await insert(userId)
+    cartId = JSON.stringify(cartId)
+    cartId = JSON.parse(cartId)
+    cartId = cartId._id
+    await UserDaoMongo.saveCartId(userId, cartId)
+    return cartId
+}
+
+const logProductAdded = (qty, productId, cartId) => {
+    if(qty > 1) {
+        logger.log("info", `${qty} units of the product ID${productId} were added to the cart Id ${cartId}`)
+        return
+    } 
+    logger.log("info", `${qty} unit of the product ID${productId} was added to the cart Id ${cartId}`)
+}
+
+const addProductFrontEnd = async (sessionID, productId, qty) => {
+    const userId = await SessionDaoMongo.getUserId(sessionID)
+    
+    if(typeof userId === "undefined"){
+        console.log(`The user isn't logged in`);
+    } else {
+        const user = await UserDaoMongo.findById(userId)
+        let cartId = user.cart_id
+
+        if(typeof cartId === "undefined") {
+            console.log("Estamos en el if");
+            cartId = await associateCartToUser(userId)
+            await addProduct(cartId,productId,qty)
+            logProductAdded(qty, productId, cartId)
+        } else {
+            const cart = await findOne(cartId)
+            if(cart === null ) {
+                cartId = await associateCartToUser(userId)
+                await addProduct(cartId,productId,qty)
+                logProductAdded(qty, productId, cartId)
+                return
+            }
+            await addProduct(cartId,productId,qty)
+            logProductAdded(qty, productId, cartId)
+        }
+    }
+}
+
+
 const deleteProduct = async (id, productId) =>{
     id = mongoose.Types.ObjectId(id)
     let cart = await findOne(id)
@@ -115,5 +164,6 @@ module.exports = {
     remove,
     getProducts,
     addProduct,
-    deleteProduct
+    deleteProduct,
+    addProductFrontEnd
 }
