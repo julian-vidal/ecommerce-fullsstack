@@ -52,6 +52,13 @@ const getSignup = (req,res) => {
     })
 }
 
+const getChat = (req,res) => {
+    res.render("pages/chat", {
+        title: "Chat",
+        user: req.user
+    })
+}
+
 const account = (req,res) => {
     res.render("pages/account",{
         title: "Account",
@@ -103,6 +110,7 @@ module.exports = {
     account,
     logout,
     error,
+    getChat,
     postLogin,
     postSignup
 }

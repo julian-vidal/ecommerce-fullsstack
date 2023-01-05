@@ -11,7 +11,6 @@ const {MONGO_URL} = process.env
 
 if (MONGO_URL) {
     mongoose.connect(MONGO_URL)
-    // db = mongoose.connect(MONGO_URL)
 }
 
 const CartSchema = new mongoose.Schema({

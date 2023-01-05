@@ -4,17 +4,17 @@ const {isLoggedIn, isLoggedOut, passportLogin, passportSignup, upload: multer, g
 // const passport = require("passport")
 require("../utils/passport")
 
-const {index, singleProduct, getSignup, getLogin, account, logout, error, postLogin, postSignup} = require("../controllers/FrontEndController") 
+const {index, singleProduct, getSignup, getLogin, account, logout, error, postLogin, postSignup, getChat } = require("../controllers/FrontEndController") 
 const routerFrontEnd = Router()
 
 // GET Requests
-routerFrontEnd.get("/", index )
-routerFrontEnd.get("/product/:id", gzipMiddleware, singleProduct )
+routerFrontEnd.get("/", [gzipMiddleware, isLoggedOut], index )
+routerFrontEnd.get("/product/:id", [gzipMiddleware, isLoggedOut], singleProduct )
 routerFrontEnd.get("/login", [gzipMiddleware, isLoggedIn], getLogin)
 routerFrontEnd.get("/signup", [gzipMiddleware, isLoggedIn], getSignup)
-routerFrontEnd.get("/signup", [gzipMiddleware,isLoggedIn], getSignup)
 routerFrontEnd.get("/account", [gzipMiddleware,isLoggedOut], account)
 routerFrontEnd.get("/logout", [gzipMiddleware,isLoggedOut], logout)
+routerFrontEnd.get("/chat", [gzipMiddleware, isLoggedOut], getChat )
 routerFrontEnd.get("/error", gzipMiddleware, error)
 
 

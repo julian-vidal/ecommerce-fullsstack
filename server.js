@@ -100,8 +100,11 @@ app.use("/api/products", ProductRoute);
 const UserRuote = require("./routes/UserRoute")
 app.use("/api/users", UserRuote)
 
-const routerFrontEnd = require("./routes/FrontEndRoute")
-app.use("/", routerFrontEnd);
-
 const routerSession = require("./routes/SessionRoute")
 app.use("/api/session", routerSession)
+
+const routerOrders = require("./routes/OrderRoute")
+app.use("/api/orders", routerOrders)
+
+const routerFrontEnd = require("./routes/FrontEndRoute")
+app.use("/", routerFrontEnd);
