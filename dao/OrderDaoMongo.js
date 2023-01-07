@@ -11,7 +11,7 @@ if (MONGO_URL) {
 const OrderSchema = new mongoose.Schema({
   products: {type: Array, required: true },
   status: {type: String, required: true},
-  userID: {type: String, required: true}
+  userEmail: {type: String, required: true}
 }, {timestamps: true})
 
 const Order = mongoose.model("orders", OrderSchema)
@@ -26,11 +26,11 @@ const findOne = async id => {
 }
 
 
-const insert = async (userID, products) => {
+const insert = async (userEmail, products) => {
   const newOrder = {
     products,
     status: "generated",
-    userID
+    userEmail
   }
 
   const order = new Order(newOrder)

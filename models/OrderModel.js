@@ -18,8 +18,8 @@ const getOne = id => {
   return OrderDao.findOne(id)
 }
 
-const insert = (userID, products) => {
-  return OrderDao.insert(userID, products)
+const insert = (userEmail, products) => {
+  return OrderDao.insert(userEmail, products)
 }
 
 

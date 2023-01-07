@@ -23,18 +23,16 @@ const getOneOrder = async (req,res) => {
 }
 
 const insertOrder = async (req, res) => {
-  const {userID, products} = req.body
-  console.log({userID})
-  console.log({products})
+  const {userEmail, products} = req.body
 
-  if(!userID || !products ){
+  if(!userEmail || !products ){
     return res
     .status(400)
-    .json({error: "userID and products are required"})
+    .json({error: "userEmail and products are required"})
   }
 
   try {
-      const order = await OrderModel.insert(userID, products)
+      const order = await OrderModel.insert(userEmail, products)
       return res
       .status(201)
       .json(order)

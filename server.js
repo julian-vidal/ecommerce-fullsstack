@@ -40,10 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-const server = app.listen(PORT, () => {
-    logger.log("info", `Server is listening at port ${PORT}`)
-});
-server.on("error", err => logger.log("error", err ));
+
 
 const IS_ADMIN = true;
 const PERMSSION_ERROR_MSG = "You don't have permission to perform this action";
@@ -81,6 +78,33 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /* ============================================
+Websockets
+============================================*/
+const {createServer} = require("http")
+const {Server} = require("socket.io")
+
+
+const httpServer = createServer(app)
+const io = new Server(httpServer)
+
+const ChatModel = require("./models/ChatModel")
+const chats = ChatModel.getAll()
+
+
+io.on("connection", socket => {
+    // logger.log("info", "New client connected")
+    console.log("New client connected");
+
+    socket.emit("updateMessages", chats)
+
+    socket.on("postMessage", async msg => {
+        const {email, message,type} = msg
+        await ChatModel.insert(message, type, email)
+        io.sockets.emit("newMessage", msg)
+    })
+})
+
+/* ============================================
 EJS setup
 ============================================*/
 app.set("view engine", "ejs");
@@ -106,5 +130,18 @@ app.use("/api/session", routerSession)
 const routerOrders = require("./routes/OrderRoute")
 app.use("/api/orders", routerOrders)
 
+const routerChats = require("./routes/ChatRoute")
+app.use("/api/chat", routerChats)
+
 const routerFrontEnd = require("./routes/FrontEndRoute")
 app.use("/", routerFrontEnd);
+
+
+httpServer.listen(PORT, () => {
+    logger.log("info", `Server is listening at port ${PORT}`)
+})
+
+// const server = app.listen(PORT, () => {
+//     logger.log("info", `Server is listening at port ${PORT}`)
+// });
+// server.on("error", err => logger.log("error", err ));
