@@ -1,0 +1,105 @@
+paths:
+  /api/carts:
+    post:
+      summary: Create a cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/NewCart"
+      responses:
+        201:
+          description: Cart created
+          content:
+            application/json:
+              content:
+                schema:
+                  $ref: "#components/schemas/Cart"
+        400:
+          description: Bad request
+    get:
+      summary: Get all carts
+      tags:
+        - Cart
+      responses:
+        200:
+          description: List of all carts
+          content:
+            application/json:
+              content:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#components/schemas/Cart"
+  /api/carts/{id}:
+    get:
+      summary: Get a cart by ID
+      tags:
+        - Cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Get a cart
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        404:
+          description: Cart not found
+    delete:
+      summary: Delete a cart
+      tags:
+        - Cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Delete a cart
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        404:
+          description: Cart not found
+  /api/carts/{id}/products:
+    post:
+      summary: Add a product to the cart
+      tags:
+        - Cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#components/schemas/ProductInCart"
+      responses:
+        201:
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        404:
+          descripton: Cart not found
+        400:
+          description: Bad request
+
+

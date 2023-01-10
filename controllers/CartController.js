@@ -23,8 +23,10 @@ const getOneCart = async (req,res) => {
 }
 
 const insertCart = async (req, res) => {
+    const {user, products} = req.body
     try {
-        const cart = await CartModel.insert(req.body.userId)
+        const cart = await CartModel.insert(user, products)
+        
         return res.json(cart)
     } catch(err) {
         return res

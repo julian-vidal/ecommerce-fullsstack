@@ -1,0 +1,44 @@
+components:
+  schemas:
+    ProductInCart:
+      type: object
+      required:
+        - id
+        - qty
+      properties: 
+        id:
+          type: string
+          description: Product's ID
+        qty:
+          type: number
+          description: Total units of the products in the cart
+      example:
+        {
+          "id": "631956b104d8741c8e5280db",
+          "qty": 1
+        }
+    Cart:
+      type: object
+      required:
+        - products
+        - user
+      properties:
+        poducts:
+          type: array
+          description: Array of products
+          items: 
+            $ref: "#components/schemas/ProductInCart"
+        user:
+          type: string
+          description: User's email
+      example:
+        user: a@a.com
+        products: [
+          {
+            "id": "631956b104d8741c8e5280db",
+            "qty": 1
+          }
+        ]
+  requestBodies:
+    NewCart:
+      $ref: "#components/schemas/Cart"

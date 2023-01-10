@@ -14,8 +14,8 @@ if (MONGO_URL) {
 }
 
 const CartSchema = new mongoose.Schema({
-    products: {type: Array, required: false},
-    user: {type: String, required: false}
+    products: {type: Array, required: true},
+    user: {type: String, required: true}
 }, {timestamps: true})
 
 const Cart = mongoose.model("carts", CartSchema)
@@ -30,7 +30,7 @@ const findOne = async id => {
 }
 
 // Creates a new cart object
-const insert = async userId => {
+const insert = async (userId, products) => {
     let user = userId;
     // console.log({userId});
     
@@ -40,7 +40,7 @@ const insert = async userId => {
    
     let newCart = {
         user,
-        products: []
+        products
     }
     
     const cart = new Cart(newCart);
