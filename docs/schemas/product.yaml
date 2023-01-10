@@ -1,0 +1,38 @@
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - name
+        - image
+        - price
+        - stock
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          description: Product's description
+        image:
+          type: string
+          description: URL of the product's image
+        price:
+          type: number
+          description: Don't include thousand separators nor the curreny symbol, eg $. Use "." as decimal separator. 
+        stock:
+          type: number
+        sku:
+          type: string
+      example:
+        name: "Sample Test"
+        description: "This is aproduct created via API"
+        image: "https://via.placeholder.com/600"
+        price: 55
+        stock: 10
+        sku: "product-sku"
+  requestBodies:
+    NewProduct:
+      $ref: "#components/schemas/Product"
+
+
+

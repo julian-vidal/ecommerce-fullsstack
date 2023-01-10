@@ -9,11 +9,11 @@ if (MONGO_URL) {
 
 const ProductSchema = new mongoose.Schema ({
     name: {type: String, required: true},
-    description: {type: String, required: true},
+    description: {type: String, required: false},
     image: {type: String, required: true},
     price: {type: Number, required: true },
     stock: {type: Number, required: true},
-    sku: {type: String, required: true}
+    sku: {type: String, required: false}
 }, {timestamps: true})
 
 const Product = mongoose.model("products", ProductSchema);

@@ -1,0 +1,101 @@
+paths:
+  /api/products:
+    post:
+      summary: Create a product
+      tags: 
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/NewProduct"
+      responses:
+        201:
+          description: Product has been created
+          content:
+            application/json:
+              content:
+                schema:
+                  $ref: "#/components/schemas/Product"
+        400:
+          description: Bad request
+    get: 
+      summary: Get all products
+      tags:
+        - Product
+      responses:
+        200:
+          description: List of all products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+  /api/products/{id}:
+    get:
+      summary: Get one product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          description: Product's ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Get a product
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Product"
+        404:
+          description: Product not found
+    put:
+      summary: Update one product
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          description: Product's ID
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/NewProduct"
+      responses:
+        200:
+          description: Product updated
+          content:
+            application/json:
+              schmea:
+                $ref: "#components/schemas/Product"
+        404: 
+          description: Product not found
+    delete:
+      summary: Delete one product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          description: Product's ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Delete a product
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Product"
+        404:
+          description: Product not found
+
+       

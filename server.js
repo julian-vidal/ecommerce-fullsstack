@@ -109,6 +109,16 @@ app.set("views", "./views");
 
 
 /* ============================================
+Swagger setup
+============================================*/
+const swaggerUi = require("swagger-ui-express")
+const swaggerDoc = require("swagger-jsdoc")
+const SwaggerOptions = require("./swagger.config")
+
+const specs = swaggerDoc(SwaggerOptions)
+
+
+/* ============================================
 Routes
 ============================================*/
 const routerCarts = require("./routes/CartRoute");
@@ -129,6 +139,10 @@ app.use("/api/orders", routerOrders)
 
 const routerChats = require("./routes/ChatRoute")
 app.use("/api/chat", routerChats)
+
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs))
+
 
 const routerFrontEnd = require("./routes/FrontEndRoute")
 app.use("/", routerFrontEnd);
