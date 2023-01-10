@@ -41,3 +41,15 @@ body main {
     max-width: 30px;
     text-align: center;
 }
+
+/* Chat */
+ul#chat {
+    padding-left: 0;
+    background: #fff;
+    padding: 4% 2%;
+}
+
+ul#chat li{
+    display: flex;
+    justify-content: space-between;
+}

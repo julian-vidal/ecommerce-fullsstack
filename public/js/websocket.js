@@ -6,26 +6,30 @@ socket.on("connect", () => {
 
 const appendMessage = msg => {
 
-  let {email, date, message} = msg
+  let {email, createdAt, message} = msg
+
+  const date = new Date(createdAt)
+  const options = {
+    dateStyle: "short",
+    timeStyle: "short"
+  }
 
   document.getElementById("chat").innerHTML += `
-    <div class="card">
-      <div class="card-header">
-        ${email}
-      </div>
-      <div class="card-body">
-        <p class="card-text">${date}: ${message} </p>
-      </div>
-    </div>
+  <li><span><b>${email}:</b> ${message}</span> <span class="fw-light">${new Intl.DateTimeFormat("default", options).format(date)}</span> </li>
   `
 }
 
 socket.on("updateMessages", allMessages => {
   document.getElementById("chat").innerHTML=""
+  
+  // allMessages
+    // .sort((a,b) => a.createdAt - b.createdAt)
+    // .map(msg => appendMessage(msg))
 
-  allMessages
-    .sort((a,b) => a.date - b.date)
-    .map(msg => appendMessage(msg))
+  allMessages.map(msg => appendMessage(msg))
+
+  
+
 })
 
 socket.on("newMessage", msg => appendMessage(msg))
@@ -34,9 +38,7 @@ socket.on("newMessage", msg => appendMessage(msg))
 
 const sendMsg = () => {
   const email = document.getElementById("email").innerHTML
-  console.log({email});
   const msg = document.getElementById("message")
-  console.log({msg: msg.value});
 
   socket.emit("postMessage", {
     email,
@@ -44,5 +46,6 @@ const sendMsg = () => {
     type: "CUSTOMER"
   })
   message.value=""
+  window.location.reload()
 }
 

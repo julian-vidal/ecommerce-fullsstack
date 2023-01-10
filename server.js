@@ -88,12 +88,13 @@ const httpServer = createServer(app)
 const io = new Server(httpServer)
 
 const ChatModel = require("./models/ChatModel")
-const chats = ChatModel.getAll()
 
-
-io.on("connection", socket => {
-    // logger.log("info", "New client connected")
-    console.log("New client connected");
+io.on("connection", async socket => {
+    logger.log("info", "New client connected")
+    const chats = await ChatModel.getAll()
+    // logger.log("info", chats)
+    // console.log(chats);
+    
 
     socket.emit("updateMessages", chats)
 

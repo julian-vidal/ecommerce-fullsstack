@@ -5,7 +5,7 @@ const {getAllChats, getByEmail, insertMessage } = require("../controllers/ChatCo
 const routerChats = Router()
 
 routerChats.get("/", getAllChats)
-routerChats.get("/:emails", getByEmail)
+routerChats.get("/:email", getByEmail)
 routerChats.post("/", insertMessage)
 
 module.exports = routerChats

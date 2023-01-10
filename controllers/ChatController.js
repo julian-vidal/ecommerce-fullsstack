@@ -12,6 +12,7 @@ const getAllChats = async(req,res) => {
 }
 
 const getByEmail = async(req,res) => {
+  console.log(req.params.email)
   try {
     const chats = await ChatModel.getByEmail(req.params.email)
     return res.json(chats)
