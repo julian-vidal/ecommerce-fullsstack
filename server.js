@@ -92,10 +92,6 @@ const ChatModel = require("./models/ChatModel")
 io.on("connection", async socket => {
     logger.log("info", "New client connected")
     const chats = await ChatModel.getAll()
-    // logger.log("info", chats)
-    // console.log(chats);
-    
-
     socket.emit("updateMessages", chats)
 
     socket.on("postMessage", async msg => {
