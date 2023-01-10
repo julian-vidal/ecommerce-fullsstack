@@ -1,5 +1,9 @@
+<script>
+    const origin = window.origin
+    console.log(origin)
+</script>
 <div class="card border-0 col-lg-3 col-md-6 shadow bg-white p-0">
-    <a href= <%= "http://localhost:"+port+"/product/"+product._id %> class="text-reset text-decoration-none" >
+    <a href= <%= "/product/"+product._id %> class="text-reset text-decoration-none" >
         
             <img src= <%= product.image %> class="card-img-top" alt="...">
             <div class="card-body">
@@ -11,10 +15,10 @@
                 $<%= product.price %>
                 <br>
                 <% if (mode=="MONGO") { %>
-                <a href= <%= "http://localhost:"+port+"/product/"+product._id  %>  class="btn btn-primary">Add to cart</a>
+                <a href= <%= "/product/"+product._id  %>  class="btn btn-primary">Add to cart</a>
         
                 <% } else { %>
-                <a href= <%= "http://localhost:"+port+"/product/"+product.id  %>  class="card-link">Update</a>
+                <a href= <%= "/product/"+product.id  %>  class="card-link">Update</a>
                 <% }  %>
             </div> <!-- // .card-body -->
     </a>
