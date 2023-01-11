@@ -1,0 +1,53 @@
+paths:
+  /api/chats:
+    post:
+      summary: Create a chat
+      tags:
+        - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/NewChat"
+      responses:
+        201:
+          description: Chat created
+          content:
+            application/json:
+              content:
+                schema:
+                  $ref: "#components/schemas/Chat"
+        400:
+          description: Bad request
+    get:
+      summary: Get all chats
+      tags:
+        - Chat
+      responses:
+        200:
+          description: List of all chats
+          content:
+            application/json:
+              content:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#components/schemas/Chat"
+  /api/chats/{email}:
+    get:
+      summary: Get chats of a specific user
+      tags:
+        - Chat
+      responses:
+        200:
+          description: Chats of a specific user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Chat"
+        400:
+          description: User not found
+

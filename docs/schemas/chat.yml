@@ -2,4 +2,22 @@ components:
   schemas:
     Chat:
       type: object
-      
+      properties:
+        email:
+          type: string
+        type:
+          type: string
+          description: User's role, eg "CUSTOMER"
+        message:
+          type: string
+      required:
+        - email
+        - type
+        - message
+      example:
+        user: a@a.com
+        type: CUSTOMER
+        message: This is a test
+  requestBodies:
+    NewChat:
+      $ref: "#components/schemas/Chat"

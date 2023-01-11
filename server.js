@@ -144,7 +144,7 @@ const routerOrders = require("./routes/OrderRoute")
 app.use("/api/orders", routerOrders)
 
 const routerChats = require("./routes/ChatRoute")
-app.use("/api/chat", routerChats)
+app.use("/api/chats", routerChats)
 
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs))

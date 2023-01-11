@@ -58,6 +58,18 @@ components:
             "qty": 1
           }
         ]
+    GetCart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#components/schemas/GetProductInCart"
+        user:
+          type: string
+        _id:
+          type: string
+
   requestBodies:
     NewCart:
       $ref: "#components/schemas/Cart"

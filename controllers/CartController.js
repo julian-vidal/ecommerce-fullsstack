@@ -70,7 +70,7 @@ const addProduct = async (req, res) => {
     let {id, qty} = req.body
     // console.log(Object.keys(req))
 
-    console.log({sessionID: req.sessionID})
+    // console.log({sessionID: req.sessionID})
     
 
     try {

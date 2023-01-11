@@ -51,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Cart"
+                $ref: "#components/schemas/GetCart"
         404:
           description: Cart not found
     delete:
@@ -99,6 +99,27 @@ paths:
                 $ref: "#components/schemas/Cart"
         404:
           descripton: Cart not found
+        400:
+          description: Bad request
+  /api/carts/{id}/products/{productID}:
+    delete:
+      tags:
+        - Cart
+      summary: Removes a poduct of the cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+        - name: productID
+          in: path
+          description: ID of the product to be removed from the cart
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product removed successfully
         400:
           description: Bad request
 

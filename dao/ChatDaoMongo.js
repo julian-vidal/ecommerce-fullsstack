@@ -8,9 +8,9 @@ if(MONGO_URL) {
 }
 
 const ChatSchema = new mongoose.Schema({
-  email: {type: String},
-  type: {type: String},
-  message: {type: String}
+  email: {type: String, required: true},
+  type: {type: String, required: true},
+  message: {type: String, required: true}
 }, {timestamps: true})
 
 const Chat = mongoose.model("chats", ChatSchema)
@@ -26,7 +26,7 @@ const findByEmail = async email => {
 const insert = async (message, type, email) => {
   const newChat = {
     message,
-    type,
+    type: type || "CUSTOMER",
     email
   }
   const chat = new Chat(newChat)

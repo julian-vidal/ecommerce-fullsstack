@@ -26,7 +26,20 @@ const find = async() => {
 
 const findOne = async id => {
     id = mongoose.Types.ObjectId(id)
-    return await Cart.findOne({_id: id})
+    try {
+        const cart = await Cart.findOne({_id: id})
+        for(let i=0; i< cart.products.length; i++){
+            const product = await ProductDaoMongo.findOne(cart.products[i].id)
+            const _product = {
+                qty: cart.products[i].qty,
+                ...product["_doc"]
+            }
+            cart.products[i] = _product
+        }
+        return cart
+    } catch (error) {
+        logger.log("error", error)
+    }
 }
 
 // Creates a new cart object
@@ -136,10 +149,10 @@ const deleteProduct = async (id, productId) =>{
     cart = Cart(cart)
 
     if(cart.products.length > 0) {
-        let existingProduct = cart.products.find(product => product.id == productId)
+        let existingProduct = cart.products.find(product => product._id == productId)
 
         if (existingProduct){    
-            const indexToUpdate = cart.products.findIndex(product => product.id === productId )
+            const indexToUpdate = cart.products.findIndex(product => product._id === productId )
             cart.products.splice(indexToUpdate, 1)
             return await cart.save()
         } 
