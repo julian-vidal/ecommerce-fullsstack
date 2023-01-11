@@ -1,0 +1,44 @@
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        userEmail:
+          type: string
+          description: User's email associated with the order
+        products:
+          type: array
+          description: Array of products
+          items:
+            $ref: "#components/schemas/ProductInCart"
+        status:
+          type: string
+          description: Order status, default is "generated"
+      required:
+        - userEmail
+        - products
+      example:
+        userEmail: "a@a.com"
+        products: [
+          {
+            "id": "631956b104d8741c8e5280db",
+            "qty": 1
+          }
+        ]
+    GetOrder:
+      type: object
+      properties:
+        userEmail: 
+          type: string
+          description: User's email associated with the order
+        products:
+          type: array
+          description: Array of products
+          items:
+            $ref: "#components/schemas/GetProductInCart"
+        status:
+          type: string
+          description: Order status, default is "generated"
+  requestBodies:
+    NewOrder:
+      $ref: "#components/schemas/Order"

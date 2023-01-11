@@ -17,6 +17,25 @@ components:
           "id": "631956b104d8741c8e5280db",
           "qty": 1
         }
+    GetProductInCart:
+      type: object
+      properties:
+        qty:
+          type: number
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        price:
+          type: number
+        stock:
+          type: number
+        sku:
+          type: string
     Cart:
       type: object
       required:

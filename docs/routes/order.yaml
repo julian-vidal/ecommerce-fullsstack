@@ -1,0 +1,56 @@
+paths:
+  /api/orders:
+    post:
+      summary: Create an order
+      tags:
+        - Order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/NewOrder"
+      responses:
+        201:
+          description: Order created
+          content:
+            application/json:
+              content:
+                schema:
+                  $ref: "#components/schemas/Order"
+        400:
+          description: Bad request
+    get:
+      summary: Get all orders
+      tags:
+        - Order
+      responses:
+        200:
+          description: List of all orders,
+          content:
+            application/json:
+              content:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#components/schemas/Order"
+  /api/orders/{id}:
+    get:
+      summary: Get an order by ID
+      tags:
+        - Order
+      parameters:
+        - name: id
+          in: path
+          description: Order ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Get an order
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/GetOrder"
+        400:
+          description: Bad request

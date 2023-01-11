@@ -10,6 +10,7 @@ require("dotenv").config()
 const cluster = require("cluster")
 const {cpus} = require("os")
 const logger = require("./utils/loggerConfig");
+const mongoose = require("mongoose")
 
 /* ============================================
 Server setup
@@ -34,7 +35,12 @@ if (cluster.isPrimary) {
 
 const app = express();
 const PORT = process.env.PORT || 8081;
-const MODE = process.env.MODE || "LOCAL";
+const MODE = process.env.MODE || "MONGO";
+const {MONGO_URL} = process.env
+
+if (MODE == "MONGO") {
+    mongoose.connect(MONGO_URL)
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
